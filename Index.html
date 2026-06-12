@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Terminal About Me</title>
+
+<style>
+body{
+    margin:0;
+    background:#050505;
+    font-family:Consolas,monospace;
+    color:#00ff88;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+}
+
+.terminal{
+    width:850px;
+    max-width:95%;
+    background:#0a0a0a;
+    border:1px solid #00ff88;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 0 30px rgba(0,255,136,.3);
+}
+
+.topbar{
+    background:#111;
+    padding:12px;
+    border-bottom:1px solid #00ff88;
+}
+
+.dot{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    display:inline-block;
+    margin-right:6px;
+}
+
+.red{background:#ff5f56;}
+.yellow{background:#ffbd2e;}
+.green{background:#27c93f;}
+
+.content{
+    padding:30px;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:25px;
+    margin-bottom:30px;
+}
+
+.profile img{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    border:3px solid #00ff88;
+    box-shadow:0 0 20px #00ff88;
+    object-fit:cover;
+}
+
+.name{
+    font-size:32px;
+    font-weight:bold;
+    text-shadow:0 0 10px #00ff88;
+}
+
+.subtitle{
+    color:#aaa;
+}
+
+.cmd{
+    color:#00ff88;
+    margin-top:18px;
+}
+
+.output{
+    color:#fff;
+    padding-left:20px;
+    line-height:1.8;
+}
+
+.cursor{
+    display:inline-block;
+    width:10px;
+    background:#00ff88;
+    animation:blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+.skills{
+    margin-top:10px;
+}
+
+.tag{
+    display:inline-block;
+    border:1px solid #00ff88;
+    padding:6px 12px;
+    border-radius:20px;
+    margin:5px;
+    color:#00ff88;
+}
+
+.footer{
+    margin-top:25px;
+    color:#666;
+}
+</style>
+</head>
+<body>
+
+<div class="terminal">
+
+    <div class="topbar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+    </div>
+
+    <div class="content">
+
+        <div class="profile">
+            <img src="profile.jpg" alt="Profile">
+            <div>
+                <div class="name">YOUR NAME</div>
+                <div class="subtitle">
+                    Ethical Hacker • Developer • Tech Enthusiast
+                </div>
+            </div>
+        </div>
+
+        <div class="cmd">root@portfolio:~$ whoami</div>
+        <div class="output">
+            A passionate developer who loves technology,
+            cybersecurity, and building cool projects.
+        </div>
+
+        <div class="cmd">root@portfolio:~$ skills</div>
+        <div class="output skills">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">Linux</span>
+            <span class="tag">Cyber Security</span>
+            <span class="tag">Python</span>
+        </div>
+
+        <div class="cmd">root@portfolio:~$ projects</div>
+        <div class="output">
+            > Personal Portfolio<br>
+            > Security Research<br>
+            > Web Applications
+        </div>
+
+        <div class="cmd">root@portfolio:~$ contact</div>
+        <div class="output">
+            email@example.com
+        </div>
+
+        <div class="cmd">
+            root@portfolio:~$
+            <span class="cursor"></span>
+        </div>
+
+        <div class="footer">
+            SYSTEM STATUS: ONLINE
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

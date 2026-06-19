@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,23 +78,14 @@ body{
 .cmd{
     color:#00ff88;
     margin-top:18px;
+    min-height:24px;
 }
 
 .output{
     color:#fff;
     padding-left:20px;
     line-height:1.8;
-}
-
-.cursor{
-    display:inline-block;
-    width:10px;
-    background:#00ff88;
-    animation:blink 1s infinite;
-}
-
-@keyframes blink{
-    50%{opacity:0;}
+    min-height:20px;
 }
 
 .skills{
@@ -110,9 +101,28 @@ body{
     color:#00ff88;
 }
 
+.cursor{
+    display:inline-block;
+    width:10px;
+    height:18px;
+    background:#00ff88;
+    animation:blink 1s infinite;
+    vertical-align:middle;
+}
+
+@keyframes blink{
+    50%{
+        opacity:0;
+    }
+}
+
 .footer{
     margin-top:25px;
     color:#666;
+}
+
+.hidden{
+    display:none;
 }
 </style>
 </head>
@@ -138,29 +148,24 @@ body{
             </div>
         </div>
 
-        <div class="cmd">root@portfolio:~$ whoami</div>
-        <div class="output">
-            Ich interessiere mich für Technik, teste gern neue Tools und schaue mir an, was es Neues in der digitalen Welt gibt.
-        </div>
+        <div class="cmd" id="cmd1"></div>
+        <div class="output hidden" id="out1"></div>
 
-        <div class="cmd">root@portfolio:~$ skills</div>
-        <div class="output skills">
+        <div class="cmd" id="cmd2"></div>
+
+        <div class="output skills hidden" id="out2">
             <span class="tag">Windows</span>
             <span class="tag">MacOS</span>
             <span class="tag">Linux</span>
             <span class="tag">Android</span>
-            <span class="tag">IOS</span>
+            <span class="tag">iOS</span>
             <span class="tag">MDM</span>
         </div>
 
-        <div class="cmd">root@portfolio:~$ projects</div>
-        <div class="output">
-            > Home Assistant<br>
-            > Proxmox<br>
-            > NAS/Backup
-        </div>
-        
-        <div class="cmd">
+        <div class="cmd" id="cmd3"></div>
+        <div class="output hidden" id="out3"></div>
+
+        <div class="cmd hidden" id="finalPrompt">
             root@portfolio:~$
             <span class="cursor"></span>
         </div>
@@ -171,6 +176,90 @@ body{
 
     </div>
 </div>
+
+<script>
+function sleep(ms){
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function typeText(element, text, speed = 30){
+    return new Promise(resolve => {
+
+        let i = 0;
+
+        const timer = setInterval(() => {
+
+            if(text[i] === "\n"){
+                element.innerHTML += "<br>";
+            } else {
+                element.innerHTML += text[i];
+            }
+
+            i++;
+
+            if(i >= text.length){
+                clearInterval(timer);
+                resolve();
+            }
+
+        }, speed);
+
+    });
+}
+
+async function startTerminal(){
+
+    await typeText(
+        document.getElementById("cmd1"),
+        "root@portfolio:~$ whoami",
+        35
+    );
+
+    const out1 = document.getElementById("out1");
+    out1.classList.remove("hidden");
+
+    await typeText(
+        out1,
+        "Ich interessiere mich für Technik, teste gern neue Tools und schaue mir an, was es Neues in der digitalen Welt gibt.",
+        18
+    );
+
+    await sleep(800);
+
+    await typeText(
+        document.getElementById("cmd2"),
+        "root@portfolio:~$ skills",
+        35
+    );
+
+    document.getElementById("out2")
+        .classList.remove("hidden");
+
+    await sleep(800);
+
+    await typeText(
+        document.getElementById("cmd3"),
+        "root@portfolio:~$ projects",
+        35
+    );
+
+    const out3 = document.getElementById("out3");
+    out3.classList.remove("hidden");
+
+    await typeText(
+        out3,
+        "> Home Assistant\n> Proxmox\n> NAS/Backup",
+        20
+    );
+
+    await sleep(500);
+
+    document.getElementById("finalPrompt")
+        .classList.remove("hidden");
+}
+
+window.onload = startTerminal;
+</script>
 
 </body>
 </html>

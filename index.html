@@ -4,261 +4,803 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Szakacs Markus</title>
+<meta name="description" content="Szakacs Markus – Technikliebhaber. Home Assistant, Proxmox, NAS/Backup und alles rund um Windows, macOS, Linux, Android und iOS.">
+<meta name="theme-color" content="#050914">
+<meta property="og:title" content="Szakacs Markus">
+<meta property="og:description" content="Technikliebhaber – Home Assistant, Proxmox, NAS/Backup.">
+<meta property="og:image" content="https://szakacs.cc/profile.jpg">
+<meta property="og:url" content="https://szakacs.cc/">
+<meta property="og:type" content="website">
+<link rel="canonical" href="https://szakacs.cc/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23050914'/%3E%3Cpath d='M16 22l12 10-12 10' stroke='%2338bdf8' stroke-width='5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M32 44h16' stroke='%23818cf8' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preload" as="image" href="profile.webp" type="image/webp">
 
 <style>
+:root{
+    --bg:#050914;
+    --bg-2:#0a1124;
+    --panel:rgba(13,22,45,.62);
+    --border:rgba(125,180,255,.16);
+    --text:#e6edf7;
+    --muted:#8b9bb8;
+    --cyan:#38bdf8;
+    --blue:#3b82f6;
+    --indigo:#818cf8;
+    --amber:#fbbf24;
+    --radius:20px;
+    --mono:ui-monospace,"Cascadia Code","SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
 body{
     margin:0;
-    background:#050505;
-    font-family:Consolas,monospace;
-    color:#00ff88;
-    display:flex;
-    justify-content:center;
-    align-items:center;
     min-height:100vh;
+    background:
+        radial-gradient(1200px 700px at 15% -10%, rgba(59,130,246,.18), transparent 60%),
+        radial-gradient(900px 600px at 110% 20%, rgba(129,140,248,.14), transparent 60%),
+        var(--bg);
+    color:var(--text);
+    font-family:var(--sans);
+    line-height:1.6;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
 }
 
-.terminal{
-    width:850px;
-    max-width:95%;
-    background:#0a0a0a;
-    border:1px solid #00ff88;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 0 30px rgba(0,255,136,.3);
+::selection{background:rgba(56,189,248,.35);color:#fff}
+
+/* ---------- Hintergrund ---------- */
+#net{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    z-index:-2;
+    pointer-events:none;
 }
 
-.topbar{
-    background:#111;
-    padding:12px;
-    border-bottom:1px solid #00ff88;
-}
-
-.dot{
-    width:12px;
-    height:12px;
+.glow{
+    position:fixed;
+    width:520px;
+    height:520px;
     border-radius:50%;
-    display:inline-block;
-    margin-right:6px;
+    filter:blur(90px);
+    opacity:.35;
+    z-index:-1;
+    pointer-events:none;
+    animation:drift 22s ease-in-out infinite alternate;
+}
+.glow.a{background:#1d4ed8;top:-160px;left:-120px}
+.glow.b{background:#6366f1;bottom:-200px;right:-140px;animation-delay:-11s}
+
+@keyframes drift{
+    0%{transform:translate(0,0) scale(1)}
+    50%{transform:translate(80px,60px) scale(1.15)}
+    100%{transform:translate(-40px,120px) scale(.95)}
 }
 
-.red{background:#ff5f56;}
-.yellow{background:#ffbd2e;}
-.green{background:#27c93f;}
-
-.content{
-    padding:30px;
+/* ---------- Layout ---------- */
+main{
+    width:min(1040px, 92vw);
+    margin:0 auto;
+    padding:clamp(48px, 9vh, 110px) 0 60px;
 }
 
-.profile{
-    display:flex;
+section{margin-bottom:clamp(64px, 10vh, 110px)}
+
+.eyebrow{
+    font-family:var(--mono);
+    font-size:.8rem;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--cyan);
+    margin:0 0 14px;
+}
+
+h2{
+    font-size:clamp(1.6rem, 3.5vw, 2.2rem);
+    margin:0 0 28px;
+    letter-spacing:-.02em;
+}
+
+/* ---------- Hero ---------- */
+.hero{
+    display:grid;
+    grid-template-columns:auto 1fr;
+    gap:clamp(28px, 6vw, 64px);
     align-items:center;
-    gap:25px;
-    margin-bottom:30px;
+    min-height:min(70vh, 620px);
 }
 
-.profile img{
-    width:140px;
-    height:140px;
+.avatar{
+    position:relative;
+    width:clamp(170px, 26vw, 250px);
+    aspect-ratio:1;
+    animation:float 7s ease-in-out infinite;
+}
+
+.avatar::before{
+    content:"";
+    position:absolute;
+    inset:-8px;
     border-radius:50%;
-    border:3px solid #00ff88;
-    box-shadow:0 0 20px #00ff88;
+    background:conic-gradient(from 0deg, var(--cyan), transparent 30%, var(--indigo) 55%, transparent 80%, var(--cyan));
+    animation:spin 6s linear infinite;
+    -webkit-mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+            mask:radial-gradient(farthest-side, transparent calc(100% - 3px), #000 calc(100% - 2px));
+}
+
+.avatar::after{
+    content:"";
+    position:absolute;
+    inset:-30px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(56,189,248,.35), transparent 65%);
+    z-index:-1;
+    animation:pulse 4s ease-in-out infinite;
+}
+
+.avatar img{
+    width:100%;
+    height:100%;
+    display:block;
+    border-radius:50%;
     object-fit:cover;
 }
 
-.name{
-    font-size:32px;
-    font-weight:bold;
-    text-shadow:0 0 10px #00ff88;
+.orbit{
+    position:absolute;
+    inset:-22px;
+    border-radius:50%;
+    border:1px dashed rgba(129,140,248,.25);
+    animation:spin 26s linear infinite reverse;
+}
+.orbit span{
+    position:absolute;
+    top:50%;
+    left:-4px;
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 12px var(--cyan);
+}
+.orbit span:nth-child(2){left:auto;right:-4px;background:var(--amber);box-shadow:0 0 12px var(--amber)}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes float{50%{transform:translateY(-12px)}}
+@keyframes pulse{50%{opacity:.55;transform:scale(1.06)}}
+
+h1{
+    font-size:clamp(2.4rem, 7vw, 4.6rem);
+    line-height:1.02;
+    margin:0 0 16px;
+    letter-spacing:-.035em;
+    background:linear-gradient(100deg, #fff 0%, #bfe6ff 30%, var(--cyan) 50%, var(--indigo) 70%, #fff 100%);
+    background-size:250% 100%;
+    -webkit-background-clip:text;
+            background-clip:text;
+    color:transparent;
+    animation:shine 8s linear infinite;
+}
+@keyframes shine{to{background-position:-250% 0}}
+
+.role{
+    font-family:var(--mono);
+    font-size:clamp(1rem, 2.2vw, 1.25rem);
+    color:var(--muted);
+    min-height:1.8em;
+    margin:0 0 26px;
+}
+.role .typed{color:var(--text)}
+
+.caret{
+    display:inline-block;
+    width:.6em;
+    height:1.1em;
+    margin-left:2px;
+    vertical-align:-.18em;
+    background:var(--cyan);
+    animation:blink 1s steps(1) infinite;
+}
+@keyframes blink{50%{opacity:0}}
+
+.actions{display:flex;flex-wrap:wrap;gap:12px}
+
+.btn{
+    --x:50%;
+    --y:50%;
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 20px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:var(--panel);
+    color:var(--text);
+    text-decoration:none;
+    font-weight:600;
+    font-size:.95rem;
+    overflow:hidden;
+    isolation:isolate;
+    backdrop-filter:blur(10px);
+    transition:transform .25s, border-color .25s, box-shadow .25s;
+}
+.btn::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(160px circle at var(--x) var(--y), rgba(56,189,248,.28), transparent 60%);
+    opacity:0;
+    transition:opacity .25s;
+    z-index:-1;
+}
+.btn:hover{transform:translateY(-2px);border-color:rgba(56,189,248,.5);box-shadow:0 10px 30px -10px rgba(56,189,248,.5)}
+.btn:hover::before{opacity:1}
+.btn.primary{background:linear-gradient(135deg, var(--blue), #6366f1);border-color:transparent}
+.btn svg{width:18px;height:18px}
+
+.scroll-hint{
+    display:flex;
+    justify-content:center;
+    margin-top:-20px;
+}
+.scroll-hint span{
+    width:24px;
+    height:38px;
+    border:2px solid rgba(139,155,184,.4);
+    border-radius:14px;
+    position:relative;
+}
+.scroll-hint span::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:7px;
+    width:4px;
+    height:8px;
+    margin-left:-2px;
+    border-radius:2px;
+    background:var(--cyan);
+    animation:scroll 1.8s ease-in-out infinite;
+}
+@keyframes scroll{0%{opacity:0;transform:translateY(0)}30%{opacity:1}100%{opacity:0;transform:translateY(14px)}}
+
+/* ---------- Terminal ---------- */
+.terminal{
+    border-radius:var(--radius);
+    background:rgba(6,11,24,.82);
+    border:1px solid var(--border);
+    box-shadow:0 30px 80px -30px rgba(0,0,0,.8), 0 0 0 1px rgba(56,189,248,.05) inset;
+    overflow:hidden;
+    backdrop-filter:blur(14px);
+    position:relative;
+}
+.terminal::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px);
+    pointer-events:none;
 }
 
-.subtitle{
-    color:#aaa;
+.topbar{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:14px 18px;
+    border-bottom:1px solid var(--border);
+    background:rgba(255,255,255,.02);
+    font-family:var(--mono);
+    font-size:.8rem;
+    color:var(--muted);
+}
+.topbar i{
+    width:12px;
+    height:12px;
+    border-radius:50%;
+    background:#334155;
+}
+.topbar i:nth-child(1){background:#64748b}
+.topbar i:nth-child(2){background:#3b82f6}
+.topbar i:nth-child(3){background:#38bdf8}
+.topbar .title{flex:1;min-width:0;text-align:center;margin-right:44px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.skip{
+    font:inherit;
+    color:var(--muted);
+    background:none;
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:3px 10px;
+    cursor:pointer;
+    transition:color .2s, border-color .2s;
+}
+.skip:hover{color:var(--text);border-color:var(--cyan)}
+.skip[hidden]{display:none}
+
+.screen{
+    padding:clamp(18px, 4vw, 32px);
+    font-family:var(--mono);
+    font-size:clamp(.85rem, 1.8vw, .98rem);
+    min-height:330px;
 }
 
-.cmd{
-    color:#00ff88;
-    margin-top:18px;
-    min-height:24px;
+.line{margin:0;white-space:pre-wrap;word-break:break-word}
+.prompt{color:var(--cyan)}
+.prompt b{color:var(--indigo);font-weight:normal}
+.out{color:#cbd5e1;padding-left:18px;margin:6px 0 18px}
+.out.list{color:var(--amber)}
+
+.chips{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    padding-left:18px;
+    margin:10px 0 18px;
+}
+.chip{
+    padding:6px 14px;
+    border-radius:999px;
+    border:1px solid rgba(56,189,248,.35);
+    color:var(--cyan);
+    background:rgba(56,189,248,.06);
+    opacity:0;
+    transform:translateY(8px) scale(.9);
+    animation:pop .45s cubic-bezier(.2,.9,.3,1.3) forwards;
+}
+@keyframes pop{to{opacity:1;transform:none}}
+
+/* ---------- Karten ---------- */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(250px, 1fr));
+    gap:20px;
 }
 
-.output{
-    color:#fff;
-    padding-left:20px;
-    line-height:1.8;
-    min-height:20px;
+.card{
+    --x:50%;
+    --y:50%;
+    --rx:0deg;
+    --ry:0deg;
+    position:relative;
+    padding:28px;
+    border-radius:var(--radius);
+    background:var(--panel);
+    border:1px solid var(--border);
+    backdrop-filter:blur(12px);
+    transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry));
+    transition:transform .2s ease-out, border-color .3s, box-shadow .3s;
+    overflow:hidden;
+    isolation:isolate;
 }
+.card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:radial-gradient(320px circle at var(--x) var(--y), rgba(56,189,248,.16), transparent 60%);
+    opacity:0;
+    transition:opacity .3s;
+    z-index:-1;
+}
+.card:hover{border-color:rgba(56,189,248,.45);box-shadow:0 24px 60px -24px rgba(59,130,246,.55)}
+.card:hover::before{opacity:1}
+
+.icon{
+    width:52px;
+    height:52px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:linear-gradient(135deg, rgba(56,189,248,.18), rgba(129,140,248,.18));
+    border:1px solid rgba(56,189,248,.3);
+    margin-bottom:18px;
+    transition:transform .4s cubic-bezier(.2,.9,.3,1.3);
+}
+.card:hover .icon{transform:scale(1.1) rotate(-6deg)}
+.icon svg{width:26px;height:26px;stroke:var(--cyan);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.card h3{margin:0 0 6px;font-size:1.2rem}
+.card p{margin:0;color:var(--muted)}
 
 .skills{
-    margin-top:10px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:12px;
+}
+.skill{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 18px;
+    border-radius:14px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    font-weight:600;
+    transition:transform .25s, border-color .25s, background .25s;
+}
+.skill::before{
+    content:"";
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 10px var(--cyan);
+}
+.skill:hover{transform:translateY(-3px);border-color:rgba(56,189,248,.5);background:rgba(56,189,248,.08)}
+
+/* ---------- Footer ---------- */
+footer{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:12px;
+    padding-top:28px;
+    border-top:1px solid var(--border);
+    font-family:var(--mono);
+    font-size:.82rem;
+    color:var(--muted);
+}
+.status{display:flex;align-items:center;gap:10px}
+.status i{
+    position:relative;
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--cyan);
+}
+.status i::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    background:var(--cyan);
+    animation:ping 2s cubic-bezier(0,0,.2,1) infinite;
+}
+@keyframes ping{75%,100%{transform:scale(2.6);opacity:0}}
+
+/* ---------- Scroll-Reveal ---------- */
+.reveal{
+    opacity:0;
+    transform:translateY(28px);
+    filter:blur(6px);
+    transition:opacity .8s ease, transform .8s cubic-bezier(.2,.8,.2,1), filter .8s ease;
+    transition-delay:var(--d, 0s);
+}
+.reveal.in{opacity:1;transform:none;filter:none}
+
+.no-js .reveal{opacity:1;transform:none;filter:none}
+
+/* ---------- Mobil ---------- */
+@media (max-width:700px){
+    .hero{grid-template-columns:1fr;text-align:center;justify-items:center;min-height:auto;padding-top:20px}
+    .actions{justify-content:center}
+    .scroll-hint{display:none}
+    .topbar .title{margin-right:0}
 }
 
-.tag{
-    display:inline-block;
-    border:1px solid #00ff88;
-    padding:6px 12px;
-    border-radius:20px;
-    margin:5px;
-    color:#00ff88;
-}
-
-.cursor{
-    display:inline-block;
-    width:10px;
-    height:18px;
-    background:#00ff88;
-    animation:blink 1s infinite;
-    vertical-align:middle;
-}
-
-@keyframes blink{
-    50%{
-        opacity:0;
-    }
-}
-
-.footer{
-    margin-top:25px;
-    color:#666;
-}
-
-.hidden{
-    display:none;
+/* ---------- Weniger Bewegung ---------- */
+@media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
+    html{scroll-behavior:auto}
+    .reveal{opacity:1;transform:none;filter:none}
 }
 </style>
 </head>
-<body>
+<body class="no-js">
 
-<div class="terminal">
+<canvas id="net" aria-hidden="true"></canvas>
+<div class="glow a" aria-hidden="true"></div>
+<div class="glow b" aria-hidden="true"></div>
 
-    <div class="topbar">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-    </div>
+<main>
 
-    <div class="content">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="avatar reveal">
+            <div class="orbit" aria-hidden="true"><span></span><span></span></div>
+            <picture>
+                <source srcset="profile.webp" type="image/webp">
+                <img src="profile.jpg" alt="Porträt von Szakacs Markus" width="480" height="480" fetchpriority="high">
+            </picture>
+        </div>
 
-        <div class="profile">
-            <img src="profile.png" alt="Profile">
-            <div>
-                <div class="name">Szakacs Markus</div>
-                <div class="subtitle">
-                    Technikliebhaber
-                </div>
+        <div>
+            <p class="eyebrow reveal" style="--d:.1s">Hallo, ich bin</p>
+            <h1 class="reveal" style="--d:.2s">Szakacs Markus</h1>
+            <p class="role reveal" style="--d:.3s" aria-label="Technikliebhaber">
+                <span class="prompt">&gt;</span> <span class="typed" id="role"></span><span class="caret" aria-hidden="true"></span>
+            </p>
+            <div class="actions reveal" style="--d:.4s">
+                <a class="btn primary" href="#terminal">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17l6-5-6-5M12 19h8"/></svg>
+                    Terminal öffnen
+                </a>
+                <a class="btn" href="https://github.com/b05at" target="_blank" rel="noopener">
+                    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.26 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5z"/></svg>
+                    GitHub
+                </a>
             </div>
         </div>
+    </section>
 
-        <div class="cmd" id="cmd1"></div>
-        <div class="output hidden" id="out1"></div>
+    <div class="scroll-hint" aria-hidden="true"><span></span></div>
 
-        <div class="cmd" id="cmd2"></div>
+    <!-- Terminal -->
+    <section id="terminal">
+        <p class="eyebrow reveal">01 — whoami</p>
+        <h2 class="reveal" style="--d:.1s">Über mich</h2>
 
-        <div class="output skills hidden" id="out2">
-            <span class="tag">Windows</span>
-            <span class="tag">MacOS</span>
-            <span class="tag">Linux</span>
-            <span class="tag">Android</span>
-            <span class="tag">iOS</span>
-            <span class="tag">MDM</span>
+        <div class="terminal reveal" style="--d:.2s">
+            <div class="topbar">
+                <i></i><i></i><i></i>
+                <span class="title">markus@szakacs.cc: ~</span>
+                <button class="skip" id="skip" type="button">überspringen</button>
+            </div>
+            <div class="screen" id="screen" aria-live="polite"></div>
         </div>
+    </section>
 
-        <div class="cmd" id="cmd3"></div>
-        <div class="output hidden" id="out3"></div>
-
-        <div class="cmd hidden" id="finalPrompt">
-            root@portfolio:~$
-            <span class="cursor"></span>
+    <!-- Skills -->
+    <section>
+        <p class="eyebrow reveal">02 — skills</p>
+        <h2 class="reveal" style="--d:.1s">Systeme, mit denen ich arbeite</h2>
+        <div class="skills">
+            <span class="skill reveal" style="--d:.05s">Windows</span>
+            <span class="skill reveal" style="--d:.1s">macOS</span>
+            <span class="skill reveal" style="--d:.15s">Linux</span>
+            <span class="skill reveal" style="--d:.2s">Android</span>
+            <span class="skill reveal" style="--d:.25s">iOS</span>
+            <span class="skill reveal" style="--d:.3s">MDM</span>
         </div>
+    </section>
 
-        <div class="footer">
-            SYSTEM STATUS: ONLINE
+    <!-- Projekte -->
+    <section>
+        <p class="eyebrow reveal">03 — projects</p>
+        <h2 class="reveal" style="--d:.1s">Projekte</h2>
+        <div class="grid">
+            <article class="card reveal" style="--d:.05s">
+                <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><circle cx="12" cy="14" r="2"/><path d="M12 16v4"/></svg></div>
+                <h3>Home Assistant</h3>
+                <p>Smart Home</p>
+            </article>
+            <article class="card reveal" style="--d:.15s">
+                <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><path d="M7 7.5h.01M7 16.5h.01M11 7.5h6M11 16.5h6"/></svg></div>
+                <h3>Proxmox</h3>
+                <p>Virtualisierung</p>
+            </article>
+            <article class="card reveal" style="--d:.25s">
+                <div class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></div>
+                <h3>NAS/Backup</h3>
+                <p>Datensicherung</p>
+            </article>
         </div>
+    </section>
 
-    </div>
-</div>
+    <footer class="reveal">
+        <span class="status"><i aria-hidden="true"></i> SYSTEM STATUS: ONLINE</span>
+        <span>© <span id="year">2026</span> Szakacs Markus</span>
+    </footer>
+
+</main>
 
 <script>
-function sleep(ms){
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+(() => {
+    "use strict";
 
-function typeText(element, text, speed = 30){
-    return new Promise(resolve => {
+    document.body.classList.remove("no-js");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    document.getElementById("year").textContent = new Date().getFullYear();
 
-        let i = 0;
-
-        const timer = setInterval(() => {
-
-            if(text[i] === "\n"){
-                element.innerHTML += "<br>";
-            } else {
-                element.innerHTML += text[i];
+    /* ---------- Scroll-Reveal ---------- */
+    const reveals = document.querySelectorAll(".reveal");
+    if ("IntersectionObserver" in window && !reduce) {
+        const io = new IntersectionObserver(entries => {
+            for (const e of entries) {
+                if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
             }
+        }, { threshold: .15, rootMargin: "0px 0px -40px 0px" });
+        reveals.forEach(el => io.observe(el));
+    } else {
+        reveals.forEach(el => el.classList.add("in"));
+    }
 
-            i++;
+    /* ---------- Rollen-Text ---------- */
+    const roleEl = document.getElementById("role");
+    const roles = ["Technikliebhaber", "teste gern neue Tools", "Home Assistant · Proxmox · NAS"];
+    (async function rotate() {
+        if (reduce) { roleEl.textContent = roles[0]; return; }
+        await sleep(700);
+        for (let i = 0; ; i = (i + 1) % roles.length) {
+            const word = roles[i];
+            for (let c = 1; c <= word.length; c++) { roleEl.textContent = word.slice(0, c); await sleep(55); }
+            await sleep(2200);
+            for (let c = word.length; c >= 0; c--) { roleEl.textContent = word.slice(0, c); await sleep(28); }
+            await sleep(350);
+        }
+    })();
 
-            if(i >= text.length){
-                clearInterval(timer);
-                resolve();
+    /* ---------- Terminal ---------- */
+    const screen = document.getElementById("screen");
+    const skipBtn = document.getElementById("skip");
+    let skipping = reduce;
+
+    const script = [
+        { cmd: "whoami", out: "Ich interessiere mich für Technik, teste gern neue Tools und schaue mir an, was es Neues in der digitalen Welt gibt." },
+        { cmd: "skills", chips: ["Windows", "MacOS", "Linux", "Android", "iOS", "MDM"] },
+        { cmd: "projects", out: "> Home Assistant\n> Proxmox\n> NAS/Backup", cls: "list" }
+    ];
+
+    function promptLine() {
+        const p = document.createElement("p");
+        p.className = "line prompt";
+        p.innerHTML = "<b>markus@szakacs</b>:~$ ";
+        screen.appendChild(p);
+        return p;
+    }
+
+    async function type(el, text, speed) {
+        const node = document.createTextNode("");
+        el.appendChild(node);
+        for (const ch of text) {
+            if (skipping) { node.data = text; return; }
+            node.data += ch;
+            await sleep(speed + (Math.random() * speed * .6));
+        }
+    }
+
+    async function runTerminal() {
+        for (const step of script) {
+            const p = promptLine();
+            const caret = document.createElement("span");
+            caret.className = "caret";
+            p.appendChild(caret);
+            if (!skipping) await sleep(450);
+            caret.remove();
+            await type(p, step.cmd, 70);
+            if (!skipping) await sleep(250);
+
+            if (step.out) {
+                const o = document.createElement("p");
+                o.className = "line out" + (step.cls ? " " + step.cls : "");
+                screen.appendChild(o);
+                await type(o, step.out, 14);
             }
+            if (step.chips) {
+                const wrap = document.createElement("div");
+                wrap.className = "chips";
+                screen.appendChild(wrap);
+                step.chips.forEach((name, i) => {
+                    const c = document.createElement("span");
+                    c.className = "chip";
+                    c.textContent = name;
+                    c.style.animationDelay = skipping ? "0s" : (i * 90) + "ms";
+                    wrap.appendChild(c);
+                });
+                if (!skipping) await sleep(step.chips.length * 90 + 400);
+            }
+            if (!skipping) await sleep(500);
+        }
+        const last = promptLine();
+        const caret = document.createElement("span");
+        caret.className = "caret";
+        last.appendChild(caret);
+        skipBtn.hidden = true;
+    }
 
-        }, speed);
+    skipBtn.addEventListener("click", () => { skipping = true; });
+    if (reduce) skipBtn.hidden = true;
 
+    let started = false;
+    const startTerminal = () => { if (!started) { started = true; runTerminal(); } };
+    if ("IntersectionObserver" in window) {
+        const tio = new IntersectionObserver(e => {
+            if (e[0].isIntersecting) { startTerminal(); tio.disconnect(); }
+        }, { threshold: .35 });
+        tio.observe(screen);
+    } else {
+        startTerminal();
+    }
+
+    /* ---------- Glanz & Neigung ---------- */
+    const finePointer = matchMedia("(pointer: fine)").matches;
+    document.querySelectorAll(".card, .btn").forEach(el => {
+        el.addEventListener("pointermove", e => {
+            const r = el.getBoundingClientRect();
+            const x = e.clientX - r.left, y = e.clientY - r.top;
+            el.style.setProperty("--x", x + "px");
+            el.style.setProperty("--y", y + "px");
+            if (finePointer && !reduce && el.classList.contains("card")) {
+                el.style.setProperty("--ry", ((x / r.width) - .5) * 10 + "deg");
+                el.style.setProperty("--rx", -((y / r.height) - .5) * 10 + "deg");
+            }
+        });
+        el.addEventListener("pointerleave", () => {
+            el.style.setProperty("--rx", "0deg");
+            el.style.setProperty("--ry", "0deg");
+        });
     });
-}
 
-async function startTerminal(){
+    /* ---------- Netzwerk-Hintergrund ---------- */
+    const canvas = document.getElementById("net");
+    const ctx = canvas.getContext("2d");
+    let W, H, dpr, nodes = [], raf = null;
+    const mouse = { x: -9999, y: -9999 };
+    const LINK = 140;
 
-    await typeText(
-        document.getElementById("cmd1"),
-        "root@portfolio:~$ whoami",
-        35
-    );
+    function resize() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = innerWidth; H = innerHeight;
+        canvas.width = W * dpr; canvas.height = H * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const count = Math.min(90, Math.round(W * H / 16000));
+        nodes = Array.from({ length: count }, () => ({
+            x: Math.random() * W,
+            y: Math.random() * H,
+            vx: (Math.random() - .5) * .35,
+            vy: (Math.random() - .5) * .35,
+            r: Math.random() * 1.6 + .6,
+            hue: Math.random() < .8 ? "56,189,248" : "129,140,248"
+        }));
+    }
 
-    const out1 = document.getElementById("out1");
-    out1.classList.remove("hidden");
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (const n of nodes) {
+            if (!reduce) {
+                n.x += n.vx; n.y += n.vy;
+                if (n.x < 0 || n.x > W) n.vx *= -1;
+                if (n.y < 0 || n.y > H) n.vy *= -1;
+                const dx = mouse.x - n.x, dy = mouse.y - n.y, d = Math.hypot(dx, dy);
+                if (d < 180 && d > 1) { n.x += dx / d * .25; n.y += dy / d * .25; }
+            }
+        }
+        for (let i = 0; i < nodes.length; i++) {
+            const a = nodes[i];
+            for (let j = i + 1; j < nodes.length; j++) {
+                const b = nodes[j];
+                const dx = a.x - b.x, dy = a.y - b.y;
+                const d2 = dx * dx + dy * dy;
+                if (d2 < LINK * LINK) {
+                    const o = (1 - Math.sqrt(d2) / LINK) * .35;
+                    ctx.strokeStyle = `rgba(${a.hue},${o})`;
+                    ctx.lineWidth = 1;
+                    ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+                }
+            }
+            const md = Math.hypot(mouse.x - a.x, mouse.y - a.y);
+            if (md < 180) {
+                ctx.strokeStyle = `rgba(56,189,248,${(1 - md / 180) * .5})`;
+                ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
+            }
+            ctx.fillStyle = `rgba(${a.hue},.9)`;
+            ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, Math.PI * 2); ctx.fill();
+        }
+        if (!reduce) raf = requestAnimationFrame(draw);
+    }
 
-    await typeText(
-        out1,
-        "Ich interessiere mich für Technik, teste gern neue Tools und schaue mir an, was es Neues in der digitalen Welt gibt.",
-        18
-    );
+    let resizeTimer;
+    addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => { resize(); if (reduce) draw(); }, 150);
+    });
+    addEventListener("pointermove", e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive: true });
+    document.addEventListener("mouseout", e => { if (!e.relatedTarget) mouse.x = mouse.y = -9999; });
+    document.addEventListener("visibilitychange", () => {
+        if (reduce) return;
+        if (document.hidden) { cancelAnimationFrame(raf); raf = null; }
+        else if (!raf) raf = requestAnimationFrame(draw);
+    });
 
-    await sleep(800);
-
-    await typeText(
-        document.getElementById("cmd2"),
-        "root@portfolio:~$ skills",
-        35
-    );
-
-    document.getElementById("out2")
-        .classList.remove("hidden");
-
-    await sleep(800);
-
-    await typeText(
-        document.getElementById("cmd3"),
-        "root@portfolio:~$ projects",
-        35
-    );
-
-    const out3 = document.getElementById("out3");
-    out3.classList.remove("hidden");
-
-    await typeText(
-        out3,
-        "> Home Assistant\n> Proxmox\n> NAS/Backup",
-        20
-    );
-
-    await sleep(500);
-
-    document.getElementById("finalPrompt")
-        .classList.remove("hidden");
-}
-
-window.onload = startTerminal;
+    resize();
+    draw();
+})();
 </script>
 
 </body>
